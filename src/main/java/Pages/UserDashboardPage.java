@@ -19,7 +19,6 @@ public class UserDashboardPage extends BaseStepMethod {
 
     public void searchProduct(String product){
         setTextElement(INPUTUSERDPAGESEARCHBOX,product+ Keys.ENTER);
-
     }
 
 }

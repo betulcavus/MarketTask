@@ -2,6 +2,8 @@ package Base;
 
 import Utilities.ConfigReader;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,10 +81,12 @@ public class BaseStepMethod {
             //System.out.println(URL);
         }
     }
+
     protected void clickElement(By locator) {
         WebElement element = this.waitVisibleByLocator(locator);
         waitClickableByOfElement(element).click();
     }
+
     public static void waitForPageToLoad(Duration timeOutInSeconds) {
         ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
@@ -120,6 +124,7 @@ public class BaseStepMethod {
         }
         return element;
     }
+
     public static void waitFor(int sec) {
         try {
             Thread.sleep(sec * 1000);
@@ -166,7 +171,6 @@ public class BaseStepMethod {
 
         LOGGER.info(driver.getCurrentUrl() + " Http status code: " + c);
 
-
         Assert.assertFalse(c.toString().startsWith("4") || c.toString().startsWith("5"), c + "Invalid Link " + driver.getCurrentUrl());
         cn.disconnect();
     }
@@ -203,7 +207,6 @@ public class BaseStepMethod {
         LOGGER.info(driver.getCurrentUrl() + " Http status code: " + c);
 
         cn.disconnect();
-
     }
 
     protected String getTextElement(By locator) {
@@ -243,7 +246,6 @@ public class BaseStepMethod {
         LOGGER.info(driver.getCurrentUrl() + " Http status code: " + c);
 
         Assert.assertFalse(c.toString().startsWith("4") || c.toString().startsWith("5"), c + "Invalid Link " + driver.getCurrentUrl());
-
     }
 
     protected void assertContains(Object actual, Object... expected) {
@@ -264,6 +266,7 @@ public class BaseStepMethod {
         Date date = new Date();
         String currentDate = dateFormat.format(date);
         return currentDate;
+
     }
 
     protected String getTabTitle() {
@@ -312,6 +315,7 @@ public class BaseStepMethod {
     }
 
     protected String takeScreenShot(String methodName, boolean isFail) {
+
         try {
             String fail = isFail ? "FailTest" : "TestResult";
             SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
@@ -332,5 +336,29 @@ public class BaseStepMethod {
             return null;
         }
     }
+
+    protected void csvWriter(By locator) throws IOException {
+        String csv = "C:\\Users\\PC\\IdeaProjects\\MarketTask\\productTitle.csv";
+        FileWriter fr=new FileWriter(csv);
+        BufferedWriter br=new BufferedWriter(fr);
+        br.write(getTextElement(locator));
+        br.close();
+    }
+
+    public String csvReader() throws IOException, CsvException {
+        CSVReader reader = new CSVReader(new FileReader("C:\\Users\\PC\\IdeaProjects\\MarketTask\\productTitle.csv"));
+        String[] csvCell;
+
+        while ((csvCell=reader.readNext())!=null){
+            titleCSV=csvCell[0];
+
+        }
+        return titleCSV;
+    }
+
+    public void go_To_HepsiBuradaSepetim(){
+        driver.navigate().to(ConfigReader.getProperty("sepetimURL"));
+    }
+
 
 }

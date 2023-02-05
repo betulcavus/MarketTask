@@ -1,5 +1,6 @@
 package Base;
 
+
 import Utilities.ConfigReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
@@ -18,9 +19,11 @@ import org.testng.annotations.Parameters;
 import java.net.MalformedURLException;
 import java.util.concurrent.TimeUnit;
 
+
 public class BaseTest {
     private static final Logger LOGGER = LogManager.getLogger(BaseTest.class);
     public static WebDriver driver;
+
 
     public synchronized static WebDriver getDriver() {
         return driver;
@@ -54,6 +57,7 @@ public class BaseTest {
                     driver = new FirefoxDriver(firefoxOptions);
                     break;
 
+
                 case "edge":
                     WebDriverManager.edgedriver().setup();
                     driver = new EdgeDriver();
@@ -63,20 +67,17 @@ public class BaseTest {
                     WebDriverManager.chromedriver().setup();
                     driver = new ChromeDriver();
             }
-
         }
         return driver;
     }
 
+
     @BeforeClass
     @Parameters(value = {"browser"})
     public synchronized void setupTest(@Optional String browser) throws MalformedURLException {
-
         driver = setDriver(browser);
-
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(25, TimeUnit.SECONDS);
-
     }
 
 //    @AfterClass
